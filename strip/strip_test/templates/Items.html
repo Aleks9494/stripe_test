@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <div style="font-size: 150%; font-weight:bold; margin: 20px 0px 10px 70px; color: DarkGreen">
+        Товары
+    </div>
+    {% for item in items %}
+    <div style="font-size: 120%; font-weight:bold; margin: 20px 0px 10px 70px; color: MidnightBlue">
+        <a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+        <br>
+        RUB {{ item.price }}
+    </div>
+    {% endfor %}
+</body>
+</html>

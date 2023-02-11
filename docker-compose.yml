@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python3 strip/manage.py makemigrations --noinput &&
+             python3 strip/manage.py migrate && 
+             python3 strip/manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    links:
+      - db
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DJANGO_SETTINGS_MODULE=strip.settings
+      - POSTGRES_DB=strip
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - DB_HOST=db
+
+  db:
+    image: postgres:14
+    ports:
+        - "5433:5432"
+    environment:
+        - POSTGRES_DB=strip
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=12345
+        - DB_HOST=db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
