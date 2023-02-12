@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Корзина покупок
+{% endblock %}
+
+{% block content %}
+  <h3 style="font-size: 100%; margin: 20px 0px 10px 70px; color: DarkGreen">Корзина покупок</h3>
+  <table style="font-size: 100%; margin: 20px 20px 20px 70px; color: Black; border-spacing: 20px 40px;">
+    <thead>
+      <tr>
+        <th style="padding: 10px">Товар</th>
+        <th style="padding: 10px"> Удалить</th>
+        <th style="padding: 10px">Кол-во</th>
+        <th style="padding: 10px"> Цена за шт</th>
+        <th style="padding: 10px">Общая стоимость</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart %}
+        {% with product=item.product %}
+          <tr>
+            <td style="padding: 10px">{{ product.name }}</td>
+            <td style="padding: 10px"><a href="{% url 'cart:cart_remove' product.id %}" style="color: MidnightBlue">Удалить</a></td>
+            <td style="padding: 10px">{{ item.quantity }}</td>
+            <td style="padding: 10px">USD {{ item.price }}</td>
+            <td style="padding: 10px">USD {{ item.total_price }}</td>
+          </tr>
+        {% endwith %}
+      {% endfor %}
+      <tr>
+        <td style="padding: 10px; color: DarkGreen">Всего</td>
+        <td colspan="4" style="padding: 10px"></td>
+        <td style="padding: 10px; color: DarkGreen">USD {{ cart.get_total_price }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <form action="{% url 'strip_test:items' %}" method="get" id="form2">
+      {% csrf_token %}
+  </form>
+  <form action="{% url 'strip_test:order' %}" method="get" id="form3">
+      {% csrf_token %}
+  </form>
+  <section class="section">
+      <div class="container" style="margin: 20px 0px 10px 30px;">
+        <button class="button is-primary" id="toshop" type="submit" form="form2">В магазин</button>
+        <button class="button is-primary" id="toorder" type="submit" form="form3">Оформить</button>
+      </div>
+  </section>
+{% endblock %}

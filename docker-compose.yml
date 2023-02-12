@@ -23,6 +23,9 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=12345
       - DB_HOST=db
+      - CART_ID=cart
+      - STRIPE_SECRET_KEY=sk_test_4eC39HqLyjWDarjtT1zdp7dc
+      - STRIPE_PUBLIC_KEY=pk_test_TYooMQauvdEDq54NiTphI7jx
 
   db:
     image: postgres:14

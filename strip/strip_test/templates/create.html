@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+    <h1 style="font-size: 100%; margin: 20px 0px 10px 70px; color: DarkGreen">Оформление заказа</h1>
+    <div class="order-info">
+        <h3 style="font-size: 90%; margin: 20px 0px 10px 70px; color: DarkGreen">Ваш заказ</h3>
+        <ul>
+            {% for item in cart %}
+                <li style="font-size: 100%; margin: 20px 0px 10px 70px; color: DarkGreen">
+                    {{ item.quantity }}x {{ item.product.name }}
+                    <span style="font-size: 100%; margin: 20px 0px 10px 70px; color: Black">USD {{ item.total_price }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <p style="font-size: 100%; margin: 20px 0px 10px 70px; color: DarkGreen">Общая сумма: USD {{ cart.get_total_price }}</p>
+    </div>
+    <form action="." method="post" class="order-form" style="font-size: 100%; width: 200px; margin: 20px 0px 10px 70px; color: DarkGreen">
+        {{ form.as_p }}
+        <br>
+        <p><input type="submit" value="Оформить заказ" class="button is-primary"></p>
+        {% csrf_token %}
+    </form>
+{% endblock %}

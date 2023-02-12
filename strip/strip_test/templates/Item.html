@@ -1,31 +1,41 @@
+{% extends "base.html" %}
 {% load static %}
 
-<html>
-  <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <script src="https://js.stripe.com/v3/"></script>
-    <script type="text/javascript">
-      window.appConfig = {
-        pk: '{{ item.pk }}'
-      }
-    </script>
-    <script src="{% static 'main.js' %}"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
-    <title>{{ title }}</title>
-  </head>
-  <body>
-    <h1 style="font-size: 150%; font-weight:bold; margin: 20px 0px 10px 70px; color: MidnightBlue">Товар</h1>
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
+    <h1 style="font-size: 150%; font-weight:bold; margin: 20px 0px 10px 70px; color: DarkGreen">Товар</h1>
     <h3 style="font-size: 120%; font-weight:bold; margin: 20px 0px 10px 70px; color: DarkGreen">{{ item.name }}</h3>
     <p style="font-size: 120%; margin: 20px 0px 10px 70px; color: DarkGreen">{{ item.description }}</p>
-    <p style="font-size: 120%; margin: 20px 0px 10px 70px; color: DarkGreen">{{ item.price }} Rub</p>
+    <p style="font-size: 120%; margin: 20px 0px 10px 70px; color: DarkGreen">{{ item.price }} USD</p>
     <form action="{% url 'cart:cart_add' item.pk %}" method="post" id="form1">
       {% csrf_token %}
     </form>
     <section class="section">
       <div class="container" style="margin: 20px 0px 10px 30px;">
-        <button class="button is-primary" id="submitBtn">Buy</button>
-        <button class="button is-primary" id="addToCart" type="submit" form="form1">Add to Cart</button>
+        <button class="button is-primary" id="submitBtn">Купить</button>
+        <button class="button is-primary" id="addToCart" type="submit" form="form1">Добавить в корзину</button>
       </div>
     </section>
-  </body>
-</html>
+    <script type="text/javascript">
+        fetch("/config/")
+        .then((result) => { return result.json(); })
+            .then((data) => {
+            var stripe = Stripe(data.publicKey);
+            var pk = appConfig.pk;
+            console.log(pk);
+            console.log(data.publicKey);
+            document.querySelector("#submitBtn").addEventListener("click", () => {
+                fetch(`/buy/${pk}`)
+                    .then((result) => { return result.json(); })
+                    .then((data) => {
+                        return stripe.redirectToCheckout({sessionId: data.sessionId})
+                            .then((res) => {
+                                console.log(res);
+                            });
+                    });
+            });
+        });
+    </script>
+{% endblock %}
