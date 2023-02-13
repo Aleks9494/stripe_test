@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView, TemplateView
 from .forms import OrderCreateForm
 from .models import Item, OrderItem, Order
 from cart.cart import Cart
@@ -68,6 +68,24 @@ class MyOrder(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Заказ - {context["order"].pk}'
+        return context
+
+
+class SuccessView(TemplateView):
+    template_name = 'success.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Мой магазин"
+        return context
+
+
+class CancelledView(TemplateView):
+    template_name = 'cancel.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Мой магазин"
         return context
 
 

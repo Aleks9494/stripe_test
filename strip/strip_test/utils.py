@@ -20,13 +20,14 @@ def create_session(data_from_db, email, discount, currency):
             }
         line_items.append(data)
     stripe.api_key = settings.STRIPE_SECRET_KEY
+    domain_url = 'http://localhost:8000/'
     if discount:
         stripe.Coupon.create(duration=discount.duration, id=discount.name, percent_off=discount.percent_off)
     session = stripe.checkout.Session.create(
         line_items=line_items,
         mode="payment",
-        success_url="http://localhost:4242/success.html",
-        cancel_url="http://localhost:4242/cancel.html",
+        success_url=f"{domain_url}"+"success",
+        cancel_url=f"{domain_url}"+"cancel",
         customer_email=email,
         discounts=[{
             'coupon': discount.name,
