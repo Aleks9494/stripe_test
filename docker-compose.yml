@@ -19,23 +19,23 @@ services:
         condition: service_healthy
     environment:
       - DJANGO_SETTINGS_MODULE=strip.settings
-      - POSTGRES_DB=strip
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=12345
-      - DB_HOST=db
-      - CART_ID=cart
-      - STRIPE_SECRET_KEY=sk_test_4eC39HqLyjWDarjtT1zdp7dc
-      - STRIPE_PUBLIC_KEY=pk_test_TYooMQauvdEDq54NiTphI7jx
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - CART_ID=${CART_ID}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
 
   db:
     image: postgres:14
     ports:
         - "5433:5432"
     environment:
-        - POSTGRES_DB=strip
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=12345
-        - DB_HOST=db
+        - POSTGRES_DB=${POSTGRES_DB}
+        - POSTGRES_USER=${POSTGRES_USER}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        - DB_HOST=${DB_HOST}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
